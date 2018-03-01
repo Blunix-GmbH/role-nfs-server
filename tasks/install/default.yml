@@ -1,0 +1,6 @@
+---
+- name: install nfs-kernel-server
+  apt:
+    pkg: nfs-kernel-server
+    state: installed
+    update_cache: no

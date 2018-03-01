@@ -1,0 +1,3 @@
+{% for key in nfs_server_exports %}
+{{ key['path'] }} {{ key['clients'] | join(' ') }}
+{% endfor %}

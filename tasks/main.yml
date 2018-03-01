@@ -1,0 +1,6 @@
+---
+- include_tasks: nfs.yml
+  when: nfs_server_enabled
+  tags:
+    - nfs-kernel-server
+    - NFSv4
