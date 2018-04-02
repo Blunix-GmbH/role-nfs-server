@@ -6,3 +6,14 @@
     group: root
     mode: 0640
   notify: restart nfs-kernel-server
+
+- name: create exported directories
+  file:
+    state: directory
+    path: "{{ nfs_server_export['path'] }}"
+    owner: "{{ nfs_server_export['owner'] }}"
+    group: "{{ nfs_server_export['group'] }}"
+    mode: "{{ nfs_server_export['group'] | default('0750') }}"
+  with_items: "{{ nfs_server_exports }}"
+  loop_control:
+    loop_var: nfs_server_export

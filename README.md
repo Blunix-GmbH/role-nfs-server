@@ -13,6 +13,8 @@ This role installs and configures the NFSv4 kernel servr.
     nfs_server_enabled: yes
     nfs_server_exports:
       - path: '/var/www'
+        owner: www-data
+        group: www-data
         clients:
           - '10.0.0.10(rw,no_root_squash,sync,no_subtree_check)'
     roles:
