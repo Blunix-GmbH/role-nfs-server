@@ -1,3 +1,36 @@
+- name: create groups for exported directories
+  group:
+    name: "{{ nfs_server_export['group'] }}"
+    gid: "{{ nfs_server_export['gid'] }}"
+    system: true
+  with_items: "{{ nfs_server_exports }}"
+  loop_control:
+    loop_var: nfs_server_export
+
+- name: create users for exported directories
+  user:
+    name: "{{ nfs_server_export['owner'] }}"
+    uid: "{{ nfs_server_export['uid'] }}"
+    group: "{{ nfs_server_export['group'] }}"
+    append: no
+    shell: /usr/sbin/nologin
+    create_home: no
+    system: true
+  with_items: "{{ nfs_server_exports }}"
+  loop_control:
+    loop_var: nfs_server_export
+
+- name: create exported directories
+  file:
+    state: directory
+    path: "{{ nfs_server_export['path'] }}"
+    owner: "{{ nfs_server_export['owner'] }}"
+    group: "{{ nfs_server_export['group'] }}"
+    mode: 0750
+  with_items: "{{ nfs_server_exports }}"
+  loop_control:
+    loop_var: nfs_server_export
+
 - name: template /etc/exports
   template:
     src: "etc/exports.j2"
@@ -6,14 +39,3 @@
     group: root
     mode: 0640
   notify: restart nfs-kernel-server
-
-- name: create exported directories
-  file:
-    state: directory
-    path: "{{ nfs_server_export['path'] }}"
-    owner: "{{ nfs_server_export['owner'] }}"
-    group: "{{ nfs_server_export['group'] }}"
-    mode: "{{ nfs_server_export['group'] | default('0750') }}"
-  with_items: "{{ nfs_server_exports }}"
-  loop_control:
-    loop_var: nfs_server_export
