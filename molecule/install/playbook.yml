@@ -7,7 +7,9 @@
     - role: role-nfs
       nfs_server_enabled: yes
       nfs_server_exports:
-        - path: '/var/www'
+        - paths:
+            - '/var/www'
+            - '/srv/www'
           owner: 'www-data'
           group: 'www-data'
           uid: 33

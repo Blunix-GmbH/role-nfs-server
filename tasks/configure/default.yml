@@ -20,13 +20,8 @@
   loop_control:
     loop_var: nfs_server_export
 
-- name: create exported directories
-  file:
-    state: directory
-    path: "{{ nfs_server_export['path'] }}"
-    owner: "{{ nfs_server_export['owner'] }}"
-    group: "{{ nfs_server_export['group'] }}"
-    mode: 0750
+- name: include tasks for exported directories creation
+  include_tasks: create_directories.yml
   with_items: "{{ nfs_server_exports }}"
   loop_control:
     loop_var: nfs_server_export
