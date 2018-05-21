@@ -1,0 +1,49 @@
+---
+- name: Converge
+  hosts: all
+  become: yes
+
+  roles:
+    - role: role-nfs
+      nfs_server_enabled: yes
+      nfs_server_exports:
+        - path: '/var/www'
+          owner: 'www-data'
+          group: 'www-data'
+          uid: 33
+          gid: 33
+          clients:
+            - '127.0.0.1(rw,no_root_squash,sync,no_subtree_check)'
+
+  tasks:
+    - name: install nfs-common
+      apt:
+        name: nfs-common
+        state: present
+        update_cache: no
+
+    - name: create groups for exported directory
+      group:
+        name: www-data
+        gid: 33
+        system: true
+
+    - name: create users for exported directory
+      user:
+        name: www-data
+        uid: 33
+        group: www-data
+        append: no
+        shell: /usr/sbin/nologin
+        create_home: no
+        system: true
+
+    - name: mount /var/www from nfs0 to /opt
+      mount:
+        path: /opt
+        src: "127.0.0.1:/var/www"
+        fstype: nfs4
+        opts: "noatime,tcp,bg,nosuid,rsize=32768,wsize=32768,soft,proto=tcp"
+        dump: 0
+        passno: 0
+        state: mounted
