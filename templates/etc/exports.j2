@@ -1,0 +1,5 @@
+{% for section in nfs_server_exports %}
+{% for path in section['paths'] %}
+{{ path }} {{ section['clients'] | join(' ') }}
+{% endfor %}
+{% endfor %}

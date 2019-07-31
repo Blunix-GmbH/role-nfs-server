@@ -1,0 +1,10 @@
+- name: create to be exported directories
+  file:
+    state: directory
+    path: "{{ nfs_server_export_dir }}"
+    owner: "{{ nfs_server_export['owner'] }}"
+    group: "{{ nfs_server_export['group'] }}"
+    mode: 0750
+  with_items: "{{ nfs_server_export['paths'] }}"
+  loop_control:
+    loop_var: nfs_server_export_dir

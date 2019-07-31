@@ -1,21 +1,9 @@
-# Ansible Role apache2
+# Ansible Role NFS (Network Filesystem) server
 
-This role installs and configures the NFSv4 kernel servr.
+This role installs and configures the NFSv4 kernel server.  
 
+An example play can be found in molecule/install/playbook.yml
 
-# Example play
-
-```yaml
-- hosts: dm.public-debian.vagrant
-  vars:
-    nfs_server_enabled: yes
-    nfs_server_exports:
-      - path: ''/var/www'
-        clients:
-          - '10.10.0.5(rw,no_root_squash,sync,no_subtree_check)'
-  roles:
-    - blunix.role-nfs
-```
 
 # License
 
