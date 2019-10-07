@@ -14,6 +14,8 @@
           group: 'www-data'
           uid: 33
           gid: 33
+          # The quotes are important here otherwise ansible does weird things to this number
+          mode: '0770'
           clients:
             - '127.0.0.1(rw,no_root_squash,sync,no_subtree_check)'
 
