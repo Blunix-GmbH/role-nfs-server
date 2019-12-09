@@ -1,25 +1,3 @@
-- name: create groups for exported directories
-  group:
-    name: "{{ nfs_server_export['group'] }}"
-    gid: "{{ nfs_server_export['gid'] }}"
-    system: true
-  with_items: "{{ nfs_server_exports }}"
-  loop_control:
-    loop_var: nfs_server_export
-
-- name: create users for exported directories
-  user:
-    name: "{{ nfs_server_export['owner'] }}"
-    uid: "{{ nfs_server_export['uid'] }}"
-    group: "{{ nfs_server_export['group'] }}"
-    append: no
-    shell: /usr/sbin/nologin
-    create_home: no
-    system: true
-  with_items: "{{ nfs_server_exports }}"
-  loop_control:
-    loop_var: nfs_server_export
-
 - name: include tasks for exported directories creation
   include_tasks: create_directories.yml
   with_items: "{{ nfs_server_exports }}"

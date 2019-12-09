@@ -5,7 +5,6 @@
     owner: "{{ nfs_server_export['owner'] }}"
     group: "{{ nfs_server_export['group'] }}"
     mode: "{{ nfs_server_export['mode'] | default('0750') }}"
-    mode: 0750
   with_items: "{{ nfs_server_export['paths'] }}"
   loop_control:
     loop_var: nfs_server_export_dir
