@@ -1,6 +1,20 @@
----
-- include_tasks: nfs.yml
-  when: nfs_server_enabled
-  tags:
-    - nfs-kernel-server
-    - NFSv4
+- name: install nfs-kernel-server
+  apt:
+    name: nfs-kernel-server
+    state: present
+    update_cache: False
+
+- name: include tasks for exported directories creation
+  include_tasks: create_directories.yml
+  with_items: "{{ nfs_server_exports }}"
+  loop_control:
+    loop_var: nfs_server_export
+
+- name: template /etc/exports
+  template:
+    src: "etc/exports.j2"
+    dest: "/etc/exports"
+    owner: root
+    group: root
+    mode: 0640
+  notify: restart nfs-kernel-server

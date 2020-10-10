@@ -1,5 +1,65 @@
----
 - name: Converge
   hosts: all
+  become: True
   roles:
     - role: role-nfs
+  vars:
+
+    nfs_server_exports:
+      - paths:
+          - /var/www
+        # user/group do NOT have to exist on the nfs server!
+        uid: 33
+        gid: 33
+        # Do not remove the quotes!
+        mode: "0770"
+        clients:
+          - 127.0.0.1(rw,no_root_squash,sync,no_subtree_check)
+
+
+  # Setup client
+  pre_tasks:
+
+    - name: install nfs-common
+      apt:
+        name: nfs-common
+        state: present
+        update_cache: False
+
+    - name: create groups for export directory
+      group:
+        name: "www-data"
+        gid: "33"
+        system: true
+
+    - name: create users for export directory
+      user:
+        name: "www-data"
+        uid: "33"
+        group: "www-data"
+        append: False
+        shell: /usr/sbin/nologin
+        create_home: False
+        system: true
+
+
+  # Prepare for molecule tests
+  post_tasks:
+
+    - name: create a test file for molecule tests
+      copy:
+        dest: /var/www/testfile.txt
+        content: ""
+        owner: "www-data"
+        group: "www-data"
+        mode: 0640
+
+    - name: mount /var/www from nfs0 to /srv
+      mount:
+        path: /srv
+        src: "127.0.0.1:/var/www"
+        fstype: nfs4
+        opts: "noatime,tcp,bg,nosuid,rsize=32768,wsize=32768,soft,proto=tcp"
+        dump: "0"
+        passno: "0"
+        state: mounted

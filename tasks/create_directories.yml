@@ -1,9 +1,9 @@
-- name: create to be exported directories
+- name: create directories for export
   file:
     state: directory
     path: "{{ nfs_server_export_dir }}"
-    owner: "{{ nfs_server_export['owner'] }}"
-    group: "{{ nfs_server_export['group'] }}"
+    owner: "{{ nfs_server_export['uid'] }}"
+    group: "{{ nfs_server_export['gid'] }}"
     mode: "{{ nfs_server_export['mode'] | default('0750') }}"
   with_items: "{{ nfs_server_export['paths'] }}"
   loop_control:

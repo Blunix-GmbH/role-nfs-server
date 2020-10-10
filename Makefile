@@ -4,7 +4,7 @@ help:
 	@echo "Available targets are:"
 	@echo "- install  - install all dependencies"
 	@echo "- molecule - run molecule tests"
-	@echo "- test     - wrapper for running all tests"
+	@echo "- test     - run all tests"
 	@echo "- clean    - clean up the workspace"
 
 install:
@@ -22,3 +22,7 @@ clean:
 	rm -rf molecule/*/.molecule
 	rm -rf molecule/*/tests/__pycache__
 	find . -name \*.pyc -delete
+
+update:
+	pur -r requirements.txt
+	$(MAKE) install

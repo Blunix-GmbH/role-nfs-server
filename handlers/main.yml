@@ -1,5 +1,5 @@
----
 - name: restart nfs-kernel-server
-  service:
+  systemd:
     name: nfs-kernel-server
     state: restarted
+    enabled: True
